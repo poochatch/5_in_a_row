@@ -1,0 +1,113 @@
+jeśli mogę wygrać, to wygraj
+jeśli w następnym bym przegrał, to zapobierz
+jeśli mogę w następnym wygrać to wygraj
+jeśli dwa ruchy później bym przegrał, to zapobierz
+
+
+t1[1] and t1[0][0] != 0 and (t1[0][1] + t1[0][2] + t1[0][3] >= 5)
+
+
+
+w razie sprytnego ataku jeśli będę robił swoje to 2 ruchy zdążę wykonać
+
+The traditional and rather effective strategy for writing AI for such games is the typical tree search strategy. That is, each board state forms a node in a graph, and a directed edge is placed between each node and states that can be resulted by a single move. In this way a tree is built with the root board being an empty node. Then, traverse the tree in some clever way to find what looks like a 'good' state. A 'good' state is usually measured by an evaluation function that uses some clever heuristics. Obviously you don't want to visit all the nodes in the tree -- that would be a lot of work! You just want something clever.
+
+You can add in a pre-computed early game and end-game to speed up those scenarios and then rely on a well-optimized tree-traversal heuristic for the mid game.
+
+The actual name of such tree traversal algorithms is the "Minimax" algorithm. Look for it on Wikipedia and you'll see a lot of rather decent material. There's some ways of boosting the efficiency of the algorithm, the most notable of which alpha-beta pruning, so be sure you take a look at that. You may want to take a look at connect-four heuristics and decide how you can apply them to your game. For example, a likely good heuristic for evaluation of board states would be to count the number of continuable 2-runs, 3-runs, and 4-runs and weight them into the score. (e.g. each 2-run would be worth 1 point, each 3 run would be worth 10 points, and each 4-run would be worth 1000 points)
+
+Another optimization strategy is to develop a heuristic that prioritizes where the minimax algorithm should search more -- usually by estimating some sort of certainty of the board evaluation function.
+
+With this strategy you should be able to get not-so-stupid AI in the same amount of time. However, really, really good AI takes a lot of effort to build, even in these sorts of "simple" games, and it still may take upwards of 10 seconds or more to get smart moves out of the way. On the other hand, there's some clever programming tricks such as pre-computing traversals through the tree while the human opponent is busy thinking. Hey, humans get to think while the computer does. Fair is fair!
+
+Hope I've been some help. Good luck! It's a fun project.
+
+shareimprove this answer
+answered Aug 5 '11 at 7:26
+
+Kaganar
+5,0841143
+2	 	
+Good comment. One thing, though: calculating the end-games is not realistic in Gomoku. It works in chess or checkers where end-games are significantly easier to calculate due to fact that there are only few game pieces left. In gomoku, on the other hand, the number of pieces grows (every move is new piece), so it does not work. –  Rauni Aug 5 '11 at 8:14
+add a comment
+up vote
+6
+down vote
+I have been trying to create a algorithm for the same program for a while now.
+
+You are of course correct that first thing Your program should do, is to check if there is a way to form a 5 and win. And if there is not, the next should be to check if Your opponent can do that, and if yes, then defense.
+
+How much have You played gomoku Yourself? How good grasp You have of the basics?
+
+Ok, next step is to think: how we can get to the positions where we can win? Obviously, to win we must have four in a row. But it we just form four in a row like this:
+
+__________
+____XOOOO_
+__________
+Then opponent can close it.
+
+But if we form "open four", like this:
+
+__________
+____OOOO__
+__________
+Then opponent cannot close both sides and You can win. So forming an open four is one way to win. Now comes the question: how can we form an open four? Surely, if we form "open three", like this:
+
+__________
+____OOO___
+__________
+Then opponent can block us:
+
+___________
+____XOOO___
+___________
+and we are back to the start.
+
+To win, we can form two open threes at the same time:
+
+____________
+____OOO_____
+_____O______
+____O_______
+Now if opponent blocks one of them, we can use the other to form an open four:
+
+____________
+_______O____
+___XOOO_____
+_____O______
+____O_______
+____________
+and win:
+
+________O___
+_______O____
+___XOOO_____
+_____O______
+____O_______
+___X________
+In gomoku terms, this is called 3x3, if You make two open threes at the same time.
+
+Notice that both threes must be open: can You understand why?
+
+There are other ways to win, too:
+
+4x3: Do You see the winning move and why it is winning?
+
+____________
+__XOOO______
+__XXXO______
+____OX______
+____________
+4x4: See the winning move?
+
+____________
+__XOOO______
+__XXXO______
+__OXOX______
+___O________
+__X_________
+These are just the basics of the game. Knowing the tactics helps You to think how to build the AI, so You can hard-code the principles.
+
+Naturally, this is just the beginning. I would appreciate if You could try to implement this and then give feedback to me.
+
+I have been trying to write the program in Java. Would You like to see the code I have done so You can playtest? It is not very good yet, but You could get new ideas from there. Although the comments and variable names are written in Estonian.. it might be very difficult to understand. :(
